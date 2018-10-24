@@ -21,7 +21,7 @@ class DynamicActionSheet: UIViewController {
         return (presentingViewController as? UINavigationController) ?? presentingViewController?.navigationController
     }
     fileprivate var initialContentInset: UIEdgeInsets!
-    open var contentHeight: CGFloat = 200
+    open var contentHeight: CGFloat = 250
     open var delegate: ListViewDelegate? {
         didSet {
             self.rootView.delegate = delegate
@@ -32,11 +32,16 @@ class DynamicActionSheet: UIViewController {
             self.rootView.datasource = datasource
         }
     }
+    open var showButton: Bool = true {
+        didSet {
+            self.rootView.button.isHidden = !showButton
+        }
+    }
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-       self.setupUI()
+        self.setupUI()
         addBottomSheeetView()
     }
     
@@ -66,6 +71,7 @@ extension DynamicActionSheet {
         self.backgroundView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         self.backgroundView.isUserInteractionEnabled = true
         self.view.addSubview(backgroundView)
+        self.rootView.showTitle()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.revealAnimation()
         }
@@ -87,9 +93,12 @@ extension DynamicActionSheet {
     }
     
     private func revealAnimation() {
-        let navHeight =  UIScreen.main.bounds.height
+        var navHeight =  UIScreen.main.bounds.height - self.contentHeight
+        if !showButton {
+            navHeight = navHeight + self.rootView.button.frame.height + 30
+        }
         UIView.animate(withDuration: 0.4, animations: {
-            self.rootView.frame = CGRect(x: 0, y: navHeight - self.contentHeight, width: self.view.frame.width, height: self.contentHeight)
+            self.rootView.frame = CGRect(x: 0, y: navHeight, width: self.view.frame.width, height: self.contentHeight)
         })
     }
 }

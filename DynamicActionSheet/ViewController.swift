@@ -10,15 +10,20 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
+    //MARK: - IBoutlets
+    @IBOutlet weak var showButtonSwitch: UISwitch!
+    //MARK: - IBActions
     @IBAction func showList(_ sender: Any) {
         let list = DynamicActionSheet()
         list.delegate = self
         list.datasource = self
+        list.showButton = showButtonSwitch.isOn
         self.present(list, animated: true)
+    }
+    
+    //MARK: - LIfeCycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
 }
 
@@ -45,5 +50,9 @@ extension ViewController: ListViewDataSource, ListViewDelegate {
     
     func didTapButton() {
         print("button")
+    }
+    
+    func title(for tableView: UITableView) -> String? {
+        return "Select ..."
     }
 }

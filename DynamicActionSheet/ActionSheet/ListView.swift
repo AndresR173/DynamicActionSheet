@@ -18,6 +18,7 @@ public protocol ListViewDataSource: class {
     func image(for tableView: UITableView, at index: Int) -> UIImage?
     func title(for tableView: UITableView, at index: Int) -> String?
     func subtitle(for tableView: UITableView, at index: Int) -> String?
+    func title(for tableView: UITableView) -> String?
 }
 
 class ListView: UIView {
@@ -30,6 +31,8 @@ class ListView: UIView {
     //MARK: - IBOutlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleHeightConstraint: NSLayoutConstraint!
     
     //MARK: - IBActions
     @IBAction func buttonAction(_ sender: UIButton) {
@@ -48,6 +51,14 @@ class ListView: UIView {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableFooterView = UIView()
+    }
+    
+    func showTitle() {
+        if let title = self.datasource?.title(for: self.tableView) {
+            self.titleLabel.text = title
+        } else {
+            self.titleHeightConstraint.constant = 0
+        }
     }
 }
 
