@@ -28,6 +28,14 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: ListViewDataSource, ListViewDelegate {
+    func listView(didSelectRowAt index: Int) {
+        print("Cell \(index)")
+    }
+    
+    var listTitle: String? {
+        return "Select..."
+    }
+    
     func numberOfRows(for tableView: UITableView) -> Int {
         return 3
     }
@@ -44,15 +52,11 @@ extension ViewController: ListViewDataSource, ListViewDelegate {
         return "Software developer \(index)"
     }
     
-    func listView(didSelectRowAt index: Int) {
-        print("cell \(index)")
-    }
-    
     func didTapButton() {
         print("button")
     }
     
-    func title(for tableView: UITableView) -> String? {
-        return "Select ..."
+    var buttonTitle: String? {
+        return "All"
     }
 }

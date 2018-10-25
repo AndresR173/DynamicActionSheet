@@ -18,7 +18,8 @@ public protocol ListViewDataSource: class {
     func image(for tableView: UITableView, at index: Int) -> UIImage?
     func title(for tableView: UITableView, at index: Int) -> String?
     func subtitle(for tableView: UITableView, at index: Int) -> String?
-    func title(for tableView: UITableView) -> String?
+    var listTitle: String? { get }
+    var buttonTitle: String? { get }
 }
 
 class ListView: UIView {
@@ -54,11 +55,8 @@ class ListView: UIView {
     }
     
     func showTitle() {
-        if let title = self.datasource?.title(for: self.tableView) {
-            self.titleLabel.text = title
-        } else {
-            self.titleHeightConstraint.constant = 0
-        }
+        self.titleLabel.text = self.datasource?.listTitle
+        self.button.setTitle(self.datasource?.buttonTitle, for: .normal)
     }
 }
 
@@ -87,4 +85,9 @@ extension ListView: UITableViewDelegate, UITableViewDataSource {
 
 private struct Constants {
     static let cell = "ListCell"
+}
+
+
+extension ListViewDataSource {
+    var buttonTitle: String? { get { return "" } }
 }
