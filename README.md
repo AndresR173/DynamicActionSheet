@@ -13,7 +13,7 @@ let list = DynamicActionSheet()
 list.delegate = self
 list.datasource = self
 //You can use a custom button (this is optional)
-list.showButton = showButtonSwitch.isOn
+list.showButton = true
 // present actionSheet like any other view controller
 self.present(list, animated: true)
 ```
