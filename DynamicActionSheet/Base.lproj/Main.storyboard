@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -38,17 +38,34 @@
                                     </switch>
                                 </subviews>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="19" translatesAutoresizingMaskIntoConstraints="NO" id="Hpb-vx-1RK">
+                                <rect key="frame" x="85.5" y="395.5" width="204.5" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Multiple Selection" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H7r-kL-j0I">
+                                        <rect key="frame" x="0.0" y="0.0" width="136.5" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a0C-Kf-2sr">
+                                        <rect key="frame" x="155.5" y="0.0" width="51" height="31"/>
+                                    </switch>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Hpb-vx-1RK" firstAttribute="top" secondItem="KHD-04-Z6X" secondAttribute="bottom" constant="8" id="8NG-rH-aoG"/>
                             <constraint firstItem="KHD-04-Z6X" firstAttribute="top" secondItem="KTm-Dj-wbc" secondAttribute="bottom" constant="8" id="Dxv-ws-7kX"/>
                             <constraint firstItem="KTm-Dj-wbc" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="UyK-Xb-mse"/>
                             <constraint firstItem="KHD-04-Z6X" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="WCt-1S-Rbo"/>
                             <constraint firstItem="KTm-Dj-wbc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fIz-ap-aGg"/>
+                            <constraint firstItem="Hpb-vx-1RK" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="i3z-DZ-xOe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="multipleSelectionSwitch" destination="a0C-Kf-2sr" id="oof-i8-HFt"/>
                         <outlet property="showButtonSwitch" destination="dq6-33-uOD" id="5qE-P1-bRr"/>
                     </connections>
                 </viewController>

@@ -16,25 +16,69 @@ class DynamicActionSheet: UIViewController {
         backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         return backgroundView
     }()
-    let rootView = ListView.instanceFromNib()
+    
+    lazy private var rootView: ListView = { [unowned self] in
+        let view = ListView.instanceFromNib()
+        view.listViewDelegate = self
+        return view
+    }()
+    
     open var presentingNavigationController: UINavigationController? {
         return (presentingViewController as? UINavigationController) ?? presentingViewController?.navigationController
     }
+    
     fileprivate var initialContentInset: UIEdgeInsets!
-    open var contentHeight: CGFloat = 250
-    open var delegate: ListViewDelegate? {
+    lazy var contentHeight: CGFloat = { [weak self] in
+        return self!.view.frame.height * 0.8
+        }()
+    
+    ///Dynamic cell delegate
+    open var delegate: DynamicActionSheetDelegate? {
         didSet {
             self.rootView.delegate = delegate
         }
     }
-    open var datasource: ListViewDataSource? {
+    
+    ///Dynamic cell datasource
+    open var datasource: DynamicActionSheetDataSource? {
         didSet {
             self.rootView.datasource = datasource
         }
     }
+    
+    /**
+     Enabling this value, the action sheet will show a 'Done' button and it will add the ability to select multiple values.
+     Once the 'Done' button is tapped, the action sheet will return an array with all the selected indexes
+     */
+    open var canSelectMultipleValues: Bool = false {
+        didSet {
+            self.rootView.canSelectMultipleValues = canSelectMultipleValues
+        }
+    }
+    
+    /**
+     Enabling this value, will show a button at the bottom of the action sheet
+     */
     open var showButton: Bool = true {
         didSet {
             self.rootView.button.isHidden = !showButton
+        }
+    }
+    /**
+     Set the style of the action sheet cells
+     - options:
+     - basic: the action sheet will show a cell with just one label
+     - detail: the action sheet will show a cell with an UIImageView, UILabel for a title and UILabel for a subtitle
+     */
+    open var cellType: DynamicCellType! {
+        didSet {
+            self.rootView.cellType = cellType
+        }
+    }
+    
+    open var indexes = [Int]() {
+        didSet {
+            self.rootView.indexes = indexes
         }
     }
     
@@ -63,7 +107,7 @@ extension DynamicActionSheet {
     func addBottomSheeetView() {
         let height = view.frame.height
         let width  = view.frame.width
-
+        
         rootView.frame = CGRect(origin: CGPoint(x: 0, y: UIScreen.main.bounds.height), size: rootView.frame.size)
         self.backgroundView.addSubview(rootView)
         
@@ -83,6 +127,10 @@ extension DynamicActionSheet {
         backgroundView.addGestureRecognizer(tapReconigzer)
         self.rootView.layer.cornerRadius = 7
         self.rootView.layer.masksToBounds = true
+        
+        if !canSelectMultipleValues {
+            self.rootView.doneButtonWidthConstraint.constant = 0
+        }
     }
     
     @objc func hideCardView(tapGestureRecognizer: UITapGestureRecognizer) {
@@ -93,12 +141,28 @@ extension DynamicActionSheet {
     }
     
     private func revealAnimation() {
-        var navHeight =  UIScreen.main.bounds.height - self.contentHeight
-        if !showButton {
-            navHeight = navHeight + self.rootView.button.frame.height + 30
+        let tableViewHeight = self.rootView.tableView.contentSize.height
+        let currentHeight = self.rootView.titleLabel.frame.height + self.rootView.button.frame.height + 32 + tableViewHeight
+        if (currentHeight <= self.contentHeight) {
+            self.contentHeight = currentHeight
         }
+        var navHeight =  UIScreen.main.bounds.maxY - self.contentHeight
+        if !showButton {
+            navHeight = navHeight + self.rootView.button.frame.height
+        }
+        
         UIView.animate(withDuration: 0.4, animations: {
             self.rootView.frame = CGRect(x: 0, y: navHeight, width: self.view.frame.width, height: self.contentHeight)
         })
+    }
+}
+public enum DynamicCellType: String {
+    case basic = "BasicTableViewCell"
+    case detail = "ActionTableViewCell"
+}
+
+extension DynamicActionSheet: ListViewDelegate {
+    func dismissView() {
+        self.dismiss(animated: true)
     }
 }

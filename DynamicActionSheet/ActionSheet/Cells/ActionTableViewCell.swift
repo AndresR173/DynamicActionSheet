@@ -8,34 +8,21 @@
 
 import UIKit
 
-class ActionTableViewCell: UITableViewCell {
+open class ActionTableViewCell: UITableViewCell {
 
     //MARK: - IBOutlets
-    @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var imgView: UIImageView?
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel?
     
-    //MARK: - Properties
-    var cellImage: UIImage? {
-        didSet {
-            self.imgView.image = cellImage
-        }
-    }
-    var title: String? {
-        didSet {
-            self.titleLabel.text = title
-        }
-    }
-    var subtitle: String? {
-        didSet {
-            self.subtitleLabel.text = subtitle
-        }
-    }
-    
-    override func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
-        imgView.layer.cornerRadius = 20
-        imgView.layer.masksToBounds = true
+        imgView?.layer.cornerRadius = 20
+        imgView?.layer.masksToBounds = true
     }
     
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        self.accessoryType = .none
+    }
 }

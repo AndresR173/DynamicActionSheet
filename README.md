@@ -22,31 +22,27 @@ self.present(list, animated: true)
 ```swift
 extension ViewController: ListViewDataSource, ListViewDelegate {
     func numberOfRows(for tableView: UITableView) -> Int {
-        return 3
+        return 10
     }
-    
-    func image(for tableView: UITableView, at index: Int) -> UIImage? {
-        return nil
+
+    func dynamicSheet(_ actionCell: ActionTableViewCell, forItemAt index: Int) {
+        actionCell.titleLabel.text = "Cell \(index)"
     }
-    
-    func title(for tableView: UITableView, at index: Int) -> String? {
-        return "title \(index)"
+
+    func didSelectMultipleIndexes(indexes: [Int]) {
+        print("\(indexes.count) values selected")
     }
-    
-    func subtitle(for tableView: UITableView, at index: Int) -> String? {
-        return "subtitle \(index)"
-    }
-    
-    func listView(didSelectRowAt index: Int) {
-        print("cell \(index)")
-    }
-    
-    func didTapButton() {
-        print("button")
-    }
-    
-    func title(for tableView: UITableView) -> String? {
+
+    var listTitle: String? {
         return "Title"
+    }
+
+    var buttonTitle: String? {
+        return "All Items"
+    }
+
+    func dynamicSheet(didSelectRowAt index: Int) {
+        print("row \(index) selected")
     }
 }
 ```
