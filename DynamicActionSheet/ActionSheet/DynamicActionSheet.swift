@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DynamicActionSheet: UIViewController {
+public class DynamicActionSheet: UIViewController {
     //MARK: - Properties
     lazy open var backgroundView: UIView = {
         let backgroundView = UIView()
@@ -83,7 +83,7 @@ class DynamicActionSheet: UIViewController {
     }
     
     //MARK: - LifeCycle
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
         addBottomSheeetView()

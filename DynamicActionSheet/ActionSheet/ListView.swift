@@ -25,7 +25,7 @@ protocol ListViewDelegate: class {
     func dismissView()
 }
 
-class ListView: UIView {
+public class ListView: UIView {
     //MARK: - Properties
     /// The delegate for the view, gets called when user taps button or self
     open weak var delegate: DynamicActionSheetDelegate?
@@ -74,7 +74,7 @@ class ListView: UIView {
         return UINib(nibName: "ListView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListView
     }
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -98,11 +98,11 @@ class ListView: UIView {
 }
 
 extension ListView: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.datasource?.numberOfRows(for: tableView) ?? 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell", for: indexPath) as! ActionTableViewCell
         self.datasource?.dynamicSheet(cell, forItemAt: indexPath.row)
         if let _ = indexes.index(where: {$0 == indexPath.row }) {
@@ -111,14 +111,14 @@ extension ListView: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.cellType == .detail {
             return 70
         }
         return 40
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !canSelectMultipleValues {
             self.delegate?.dynamicSheet(didSelectRowAt: indexPath.row)
             DispatchQueue.main.async {
