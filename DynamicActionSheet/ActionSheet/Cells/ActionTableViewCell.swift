@@ -11,9 +11,9 @@ import UIKit
 open class ActionTableViewCell: UITableViewCell {
 
     //MARK: - IBOutlets
-    @IBOutlet weak var imgView: UIImageView?
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel?
+    @IBOutlet public weak var imgView: UIImageView?
+    @IBOutlet public weak var titleLabel: UILabel!
+    @IBOutlet public weak var subtitleLabel: UILabel?
     
     override open func awakeFromNib() {
         super.awakeFromNib()

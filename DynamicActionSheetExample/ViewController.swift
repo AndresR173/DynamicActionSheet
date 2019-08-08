@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DynamicActionSheet
 
 class ViewController: UIViewController {
     //MARK: - IBoutlets
@@ -14,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var multipleSelectionSwitch: UISwitch!
     //MARK: - IBActions
     @IBAction func showList(_ sender: Any) {
-        let list = DynamicActionSheet()
+        let list = DynamicActionSheet(nibName: nil, bundle: nil)
         list.delegate = self
         list.datasource = self
         list.cellType = .basic
@@ -30,6 +31,10 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: DynamicActionSheetDelegate, DynamicActionSheetDataSource {
+    func didTapButton() {
+        
+    }
+
     func numberOfRows(for tableView: UITableView) -> Int {
         return 10
     }
