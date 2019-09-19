@@ -26,112 +26,64 @@ protocol ListViewDelegate: class {
 }
 
 public class ListView: UIView {
+
     //MARK: - Properties
-    /// The delegate for the view, gets called when user taps button or self
-    open weak var delegate: DynamicActionSheetDelegate?
-    /// The datasource for the list
-    open weak var datasource: DynamicActionSheetDataSource?
+
+
+
+    // MARK: - UI properties
+
     
-    //open var defaultTableViewHeight: CGFloat = 193.0
     
-    open var canSelectMultipleValues: Bool = false
-    
-    open var indexes = [Int]()
-    
-    open var cellType: DynamicCellType! {
-        didSet {
-            self.registerNib()
-        }
+    // MARK: - IBOutlets
+//    @IBOutlet weak var tableView: UITableView!
+//    @IBOutlet weak var button: UIButton!
+//    @IBOutlet weak var titleLabel: UILabel!
+//    @IBOutlet weak var titleHeightConstraint: NSLayoutConstraint!
+//    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
+//    @IBOutlet weak var doneButton: UIButton!
+//    @IBOutlet weak var doneButtonWidthConstraint: NSLayoutConstraint!
+
+    // MARK: - IBActions
+//    @IBAction func buttonAction(_ sender: UIButton) {
+//        self.delegate?.didTapButton()
+//        DispatchQueue.main.async {
+//            self.listViewDelegate?.dismissView()
+//        }
+//    }
+//    @IBAction func doneButtonAction(_ sender: Any) {
+//        self.delegate?.didSelectMultipleIndexes(indexes: self.indexes)
+//        DispatchQueue.main.async {
+//            self.listViewDelegate?.dismissView()
+//        }
+//    }
+
+    // MARK: - LifeCycle
+//    class func instanceFromNib() -> ListView {
+//        return UINib(nibName: "ListView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListView
+//    }
+
+    // MARK: - LifeCycle
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+
+
     }
-    
-    weak var listViewDelegate: ListViewDelegate?
-    
-    //MARK: - IBOutlets
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var button: UIButton!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var titleHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var doneButton: UIButton!
-    @IBOutlet weak var doneButtonWidthConstraint: NSLayoutConstraint!
-    
-    //MARK: - IBActions
-    @IBAction func buttonAction(_ sender: UIButton) {
-        self.delegate?.didTapButton()
-        DispatchQueue.main.async {
-            self.listViewDelegate?.dismissView()
-        }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    @IBAction func doneButtonAction(_ sender: Any) {
-        self.delegate?.didSelectMultipleIndexes(indexes: self.indexes)
-        DispatchQueue.main.async {
-            self.listViewDelegate?.dismissView()
-        }
-    }
-    
-    //MARK: - LifeCycle
-    class func instanceFromNib() -> ListView {
-        return UINib(nibName: "ListView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ListView
-    }
-    
-    override public func awakeFromNib() {
-        super.awakeFromNib()
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.tableFooterView = UIView()
-        let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        self.tableView.contentInset = insets
-    }
-    
-    func showTitle() {
-        self.titleLabel.text = self.datasource?.listTitle
-        self.button.setTitle(self.datasource?.buttonTitle, for: .normal)
-    }
-    
-    private func registerNib() {
-        if cellType == .detail {
-            self.tableView.register(UINib(nibName: "ActionTableViewCell", bundle: nil), forCellReuseIdentifier: "ListCell")
-        } else {
-            self.tableView.register(UINib(nibName: "BasicTableViewCell", bundle: nil), forCellReuseIdentifier: "ListCell")
-        }
-    }
+
 }
 
-extension ListView: UITableViewDelegate, UITableViewDataSource {
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.datasource?.numberOfRows(for: tableView) ?? 0
-    }
+
+
+// MARK: - Helpers
+extension ListView {
     
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell", for: indexPath) as! ActionTableViewCell
-        self.datasource?.dynamicSheet(cell, forItemAt: indexPath.row)
-        if let _ = indexes.index(where: {$0 == indexPath.row }) {
-            cell.accessoryType = .checkmark
-        }
-        return cell
-    }
-    
-    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.cellType == .detail {
-            return 70
-        }
-        return 40
-    }
-    
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !canSelectMultipleValues {
-            self.delegate?.dynamicSheet(didSelectRowAt: indexPath.row)
-            DispatchQueue.main.async {
-                self.listViewDelegate?.dismissView()
-            }
-        } else {
-            if let index = indexes.index(where: {$0 == indexPath.row}) {
-                indexes.remove(at: index)
-            } else {
-                self.indexes.append(indexPath.row)
-            }
-            self.tableView.reloadData()
-        }
+
+    private func setupUI() {
+
     }
 }
 
