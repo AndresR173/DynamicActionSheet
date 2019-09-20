@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "DynamicActionSheet"
-  spec.version = "1.0.0"
+  spec.version = "1.1.0"
   spec.summary = "DynamicActionSheet is a library to quickly create any custom action sheet controller."
   spec.homepage = "https://github.com/afr0man17/DynamicActionSheet"
   spec.license = { type: 'MIT', file: 'LICENSE' }
