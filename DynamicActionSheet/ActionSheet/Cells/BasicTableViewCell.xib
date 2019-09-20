@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,11 +35,11 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="ikS-Mr-0fx" secondAttribute="trailing" id="1eK-kB-6HI"/>
+                    <constraint firstItem="igN-1U-VrV" firstAttribute="centerY" secondItem="ucd-R5-Qbx" secondAttribute="centerY" id="38Y-Le-hO5"/>
                     <constraint firstAttribute="bottom" secondItem="ikS-Mr-0fx" secondAttribute="bottom" id="4oR-Q1-eaR"/>
-                    <constraint firstItem="igN-1U-VrV" firstAttribute="centerY" secondItem="ucd-R5-Qbx" secondAttribute="centerY" id="CYC-Ph-RDl"/>
-                    <constraint firstItem="igN-1U-VrV" firstAttribute="leading" secondItem="ucd-R5-Qbx" secondAttribute="leading" constant="16" id="E6Q-F8-TK3"/>
-                    <constraint firstAttribute="trailing" secondItem="igN-1U-VrV" secondAttribute="trailing" constant="8" id="PCa-gt-P67"/>
+                    <constraint firstAttribute="trailing" secondItem="igN-1U-VrV" secondAttribute="trailing" constant="8" id="Thw-ej-U2H"/>
                     <constraint firstItem="ikS-Mr-0fx" firstAttribute="leading" secondItem="ucd-R5-Qbx" secondAttribute="leading" id="WQ0-cU-rnq"/>
+                    <constraint firstItem="igN-1U-VrV" firstAttribute="leading" secondItem="ucd-R5-Qbx" secondAttribute="leading" constant="16" id="hQx-BH-AIk"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="KyP-3A-Vi8"/>

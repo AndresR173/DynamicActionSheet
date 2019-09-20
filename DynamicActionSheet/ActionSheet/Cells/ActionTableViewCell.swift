@@ -10,6 +10,10 @@ import UIKit
 
 open class ActionTableViewCell: UITableViewCell {
 
+    // MARK: - Properties
+
+    static let IDENTIFIER = "ListCell"
+
     //MARK: - IBOutlets
     @IBOutlet public weak var imgView: UIImageView?
     @IBOutlet public weak var titleLabel: UILabel!

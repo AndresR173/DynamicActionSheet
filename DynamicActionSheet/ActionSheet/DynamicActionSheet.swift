@@ -8,32 +8,22 @@
 
 import UIKit
 
+public protocol DynamicActionSheetDelegate: class {
+    func dynamicSheet(didSelectRowAt index: Int)
+    func didSelectMultipleIndexes(indexes: [Int])
+    func didTapButton()
+}
+
+public protocol DynamicActionSheetDataSource: class {
+    func numberOfRows(for tableView: UITableView) -> Int
+    func dynamicSheet(_ actionCell: ActionTableViewCell, forItemAt index: Int)
+    var listTitle: String? { get }
+    var buttonTitle: String? { get }
+}
+
 public class DynamicActionSheet: UIViewController {
 
     // MARK: - Properties
-    
-    open var presentingNavigationController: UINavigationController? {
-        return (presentingViewController as? UINavigationController) ?? presentingViewController?.navigationController
-    }
-    
-    fileprivate var initialContentInset: UIEdgeInsets!
-    lazy var contentHeight: CGFloat = { [weak self] in
-        return self!.view.frame.height * 0.8
-        }()
-    
-    ///Dynamic cell delegate
-//    open var delegate: DynamicActionSheetDelegate? {
-//        didSet {
-//            self.rootView.delegate = delegate
-//        }
-//    }
-
-    ///Dynamic cell datasource
-//    open var datasource: DynamicActionSheetDataSource? {
-//        didSet {
-//            self.rootView.datasource = datasource
-//        }
-//    }
 
     /**
      Enabling this value, the action sheet will show a 'Done' button and it will add the ability to select multiple values.
@@ -45,6 +35,7 @@ public class DynamicActionSheet: UIViewController {
      Enabling this value, will show a button at the bottom of the action sheet
      */
     open var showButton: Bool = true
+
     /**
      Set the style of the action sheet cells
      - options:
@@ -52,19 +43,17 @@ public class DynamicActionSheet: UIViewController {
      - detail: the action sheet will show a cell with an UIImageView, UILabel for a title and UILabel for a subtitle
      */
     open var cellType: DynamicCellType!
-    
-    open var indexes = [Int]()
+
+    /// This array will store all the idexes selected by the user
+    private var indexes = [Int]()
 
     /// The delegate for the view, gets called when user taps button or self
     open weak var delegate: DynamicActionSheetDelegate?
+
     /// The datasource for the list
     open weak var datasource: DynamicActionSheetDataSource?
 
-    weak var listViewDelegate: ListViewDelegate?
-
-    //open var defaultTableViewHeight: CGFloat = 193.0
-
-    // MARK: UI Properties
+    // MARK: UI Elements
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -77,6 +66,8 @@ public class DynamicActionSheet: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(NSLocalizedString("Done", comment: "done"), for: .normal)
+
+        button.addTarget(self, action: #selector(doneButtonAction), for: .touchUpInside)
 
         return button
     }()
@@ -103,12 +94,13 @@ public class DynamicActionSheet: UIViewController {
     private lazy var auxButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
 
         return button
     }()
 
     private lazy var containerView: UIView = {
-        let view = UIView(frame: CGRect(x: 0, y: -260, width: self.view.frame.width, height: 250))
+        let view = UIView(frame: CGRect(x: 0, y: UIScreen.main.bounds.maxY, width: self.view.frame.width, height: 250))
         view.backgroundColor = .white
         view.layer.cornerRadius = 7
         view.layer.masksToBounds = true
@@ -126,13 +118,12 @@ public class DynamicActionSheet: UIViewController {
     }()
     
     // MARK: - LifeCycle
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
-
     }
-    
-    // MARK: - ActionController initializers
+
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         modalPresentationStyle = .custom
@@ -156,18 +147,12 @@ extension DynamicActionSheet {
         backgroundView.addGestureRecognizer(tapReconigzer)
 
         let bundle = Bundle.init(for: DynamicActionSheet.self)
-        if cellType == .detail {
-            self.tableView.register(UINib(nibName: "ActionTableViewCell", bundle: bundle), forCellReuseIdentifier: "ListCell")
-        } else {
-            self.tableView.register(UINib(nibName: "BasicTableViewCell", bundle: bundle), forCellReuseIdentifier: "ListCell")
-        }
+        self.tableView.register(UINib(nibName: cellType.rawValue, bundle: bundle), forCellReuseIdentifier: ActionTableViewCell.IDENTIFIER)
+
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableFooterView = UIView()
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.estimatedRowHeight = 40
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-
 
         containerView.addSubview(tableView)
         containerView.addSubview(doneButton)
@@ -186,6 +171,9 @@ extension DynamicActionSheet {
         auxButton.isHidden = !showButton
         doneButton.isHidden = !canSelectMultipleValues
 
+        self.titleLabel.text = self.datasource?.listTitle
+        self.auxButton.setTitle(self.datasource?.buttonTitle, for: .normal)
+
         let showStack = self.datasource?.listTitle != nil || canSelectMultipleValues
 
         NSLayoutConstraint.activate([
@@ -194,7 +182,7 @@ extension DynamicActionSheet {
             stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             stackView.heightAnchor.constraint(equalToConstant: showStack ? 44 : 0),
 
-            auxButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            auxButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
             auxButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             auxButton.heightAnchor.constraint(equalToConstant: showButton ? 44 : 0),
 
@@ -202,11 +190,8 @@ extension DynamicActionSheet {
             tableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: auxButton.topAnchor, constant: -8)
-            ])
+        ])
 
-
-
-        self.showTitle()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.revealAnimation()
         }
@@ -215,40 +200,62 @@ extension DynamicActionSheet {
     @objc func hideCardView(tapGestureRecognizer: UITapGestureRecognizer) {
         let location = tapGestureRecognizer.location(in: backgroundView)
         if !containerView.frame.contains(location) {
-            self.dismiss(animated: true)
+            self.hideAnimation()
         }
     }
 
-    func showTitle() {
-        self.titleLabel.text = self.datasource?.listTitle
-        self.auxButton.setTitle(self.datasource?.buttonTitle, for: .normal)
+    private func hideAnimation() {
+        UIView.animate(withDuration: 0.4, animations: {
+            self.containerView.frame = CGRect(x: 0,
+                                              y: UIScreen.main.bounds.maxY,
+                                              width: self.view.frame.width,
+                                              height: self.containerView.frame.height)
+        }, completion: { _ in
+            self.dismiss(animated: true)
+        })
     }
     
     private func revealAnimation() {
+        var contentHeight = self.view.frame.height * 0.8
         let tableViewHeight = self.tableView.contentSize.height
-        let currentHeight = self.titleLabel.frame.height + self.auxButton.frame.height + 32 + tableViewHeight
-        if (currentHeight <= self.contentHeight) {
-            self.contentHeight = currentHeight
+        let currentHeight = self.stackView.frame.height + tableViewHeight + self.auxButton.frame.height + 16
+        if (currentHeight < contentHeight) {
+            contentHeight = currentHeight
         }
-        var navHeight =  UIScreen.main.bounds.maxY - self.contentHeight
-        if !showButton {
-            navHeight = navHeight + self.auxButton.frame.height
-        }
+        let navHeight =  UIScreen.main.bounds.maxY - contentHeight
 
         UIView.animate(withDuration: 0.4, animations: {
-            self.view.frame = CGRect(x: 0, y: navHeight, width: self.view.frame.width, height: self.contentHeight)
+            self.containerView.frame = CGRect(x: 0,
+                                              y: navHeight,
+                                              width: self.view.frame.width,
+                                              height: contentHeight)
         })
+    }
+
+    @objc private func buttonAction(_ sender: UIButton) {
+        self.delegate?.didTapButton()
+        self.hideAnimation()
+    }
+
+    @objc private func doneButtonAction(_ sender: Any) {
+        self.delegate?.didSelectMultipleIndexes(indexes: self.indexes)
+        self.hideAnimation()
     }
 }
 
 // MARK: - UITableView Delegate - Datasource
+
 extension DynamicActionSheet: UITableViewDelegate, UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.datasource?.numberOfRows(for: tableView) ?? 0
     }
 
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellType == .basic ? 40 : 60
+    }
+
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell", for: indexPath) as! ActionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ActionTableViewCell.IDENTIFIER, for: indexPath) as! ActionTableViewCell
         self.datasource?.dynamicSheet(cell, forItemAt: indexPath.row)
         if let _ = indexes.firstIndex(where: {$0 == indexPath.row }) {
             cell.accessoryType = .checkmark
@@ -257,30 +264,21 @@ extension DynamicActionSheet: UITableViewDelegate, UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !canSelectMultipleValues {
-            self.delegate?.dynamicSheet(didSelectRowAt: indexPath.row)
-            DispatchQueue.main.async {
-                self.listViewDelegate?.dismissView()
-            }
-        } else {
+        if canSelectMultipleValues {
             if let index = indexes.firstIndex(where: {$0 == indexPath.row}) {
                 indexes.remove(at: index)
             } else {
                 indexes.append(indexPath.row)
             }
             tableView.reloadData()
+        } else {
+            self.delegate?.dynamicSheet(didSelectRowAt: indexPath.row)
+            self.hideAnimation()
         }
     }
 }
 
-
 public enum DynamicCellType: String {
     case basic = "BasicTableViewCell"
     case detail = "ActionTableViewCell"
-}
-
-extension DynamicActionSheet: ListViewDelegate {
-    func dismissView() {
-        self.dismiss(animated: true)
-    }
 }
