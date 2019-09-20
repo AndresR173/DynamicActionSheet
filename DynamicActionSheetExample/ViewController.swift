@@ -36,7 +36,7 @@ extension ViewController: DynamicActionSheetDelegate, DynamicActionSheetDataSour
     }
 
     func numberOfRows(for tableView: UITableView) -> Int {
-        return 10
+        return 5
     }
     
     func dynamicSheet(_ actionCell: ActionTableViewCell, forItemAt index: Int) {

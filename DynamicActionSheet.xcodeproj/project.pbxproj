@@ -16,7 +16,6 @@
 		B9067B4222FA1A36009944ED /* DynamicActionSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9067B3B22FA1A36009944ED /* DynamicActionSheet.framework */; };
 		B9067B4322FA1A36009944ED /* DynamicActionSheet.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B9067B3B22FA1A36009944ED /* DynamicActionSheet.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B9067B4822FA1A43009944ED /* DynamicActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414BD1A42180CED800ADF9CD /* DynamicActionSheet.swift */; };
-		B9067B4922FA1A47009944ED /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414BD1A82180D30800ADF9CD /* ListView.swift */; };
 		B9067B4B22FA1A59009944ED /* ActionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414BD1B121811BD800ADF9CD /* ActionTableViewCell.swift */; };
 		B9067B4C22FA1A5D009944ED /* ActionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 414BD1B221811BD800ADF9CD /* ActionTableViewCell.xib */; };
 		B9067B4D22FA1A62009944ED /* BasicTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41A2D0E621AB0F7100D6CE53 /* BasicTableViewCell.xib */; };
@@ -48,7 +47,6 @@
 
 /* Begin PBXFileReference section */
 		414BD1A42180CED800ADF9CD /* DynamicActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicActionSheet.swift; sourceTree = "<group>"; };
-		414BD1A82180D30800ADF9CD /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		414BD1B121811BD800ADF9CD /* ActionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionTableViewCell.swift; sourceTree = "<group>"; };
 		414BD1B221811BD800ADF9CD /* ActionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActionTableViewCell.xib; sourceTree = "<group>"; };
 		41A2D0E621AB0F7100D6CE53 /* BasicTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BasicTableViewCell.xib; sourceTree = "<group>"; };
@@ -129,7 +127,6 @@
 			children = (
 				414BD1B021811BA200ADF9CD /* Cells */,
 				414BD1A42180CED800ADF9CD /* DynamicActionSheet.swift */,
-				414BD1A82180D30800ADF9CD /* ListView.swift */,
 			);
 			path = ActionSheet;
 			sourceTree = "<group>";
@@ -269,7 +266,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9067B4922FA1A47009944ED /* ListView.swift in Sources */,
 				B9067B4822FA1A43009944ED /* DynamicActionSheet.swift in Sources */,
 				B9067B4B22FA1A59009944ED /* ActionTableViewCell.swift in Sources */,
 			);
