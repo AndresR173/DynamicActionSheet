@@ -1,6 +1,6 @@
 # DynamicActionSheet
 
-![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master) ![Platform](https://img.shields.io/badge/platform-iOS-blue.svg?style=flat) ![Compatible](https://img.shields.io/badge/swift4-compatible-4BC51D.svg?style=flat) ![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)
+![Platform](https://img.shields.io/badge/platform-iOS-blue.svg?style=flat) ![Compatible](https://img.shields.io/badge/swift4-compatible-4BC51D.svg?style=flat) ![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)
 
 **DynamicActionSheet** is a library to quickly create any custom action sheet controller.
 
